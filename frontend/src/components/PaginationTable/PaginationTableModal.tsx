@@ -53,6 +53,7 @@ export default function PaginationTableModal({
   };
   const columnId = useId();
   const itemId = useId();
+  const subItemId = useId();
   return (
     <>
       {selectedItem && (
@@ -76,7 +77,7 @@ export default function PaginationTableModal({
                   <TableRow>
                     {columns.map((column, index) => (
                       <TableCell
-                        key={`${columnId}-${index}-${column.id}`}
+                        key={`${columnId}-${index}`}
                         sx={{ minWidth: '100px' }}
                       >
                         {column.label}
@@ -96,11 +97,11 @@ export default function PaginationTableModal({
                           key={`${itemId}-${index}`}
                           onClick={(e) => handleSetSelectedItem(e, item)}
                         >
-                          {columns.map((column) => {
+                          {columns.map((column,index) => {
                             const value = _.get(item, column.id);
                             return (
                               <TableCell
-                                key={`${itemId}-${column.id}-${index}`}
+                                key={`${index}-${subItemId}`}
                               >
                                 {column.format ? column.format(value) : value}
                               </TableCell>

@@ -45,6 +45,7 @@ export default function PaginationTable<T>({
   };
   const columnId = useId();
   const itemId = useId();
+  const subItemId = useId();
   return (
     <Paper
       sx={{
@@ -60,7 +61,7 @@ export default function PaginationTable<T>({
                 <TableRow>
                   {columns.map((column, index) => (
                     <TableCell
-                      key={`${columnId}-${index}-${column.id}`}
+                      key={`${columnId}-${index}`}
                       sx={{ minWidth: '100px' }}
                     >
                       {column.label}
@@ -79,10 +80,10 @@ export default function PaginationTable<T>({
                         tabIndex={-1}
                         key={`${itemId}-${index}`}
                       >
-                        {columns.map((column) => {
+                        {columns.map((column,index) => {
                           const value = _.get(item, column.id);
                           return (
-                            <TableCell key={`${itemId}-${column.id}-${index}`}>
+                            <TableCell key={`${index}-${subItemId}`}>
                               {column.format ? column.format(value) : value}
                             </TableCell>
                           );
