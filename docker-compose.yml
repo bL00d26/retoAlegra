@@ -1,0 +1,143 @@
+version: '3.8'
+services:
+  db:
+    image: mongo:latest
+    container_name: db
+    ports:
+      - 27017:27017
+  mongo-seed:
+    container_name: mongo-seed
+    build: ./mongo-seed
+    depends_on:
+      - db
+  redis:
+    image: redis:latest
+    container_name: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 6379:6379
+  redis-commander:
+    container_name: redis-commander
+    image: rediscommander/redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - 8081:8081
+    depends_on:
+      - redis
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    healthcheck:
+      test: nc -z localhost 9092 || exit -1
+      start_period: 30s
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    ports:
+      - '9092:9092'
+    expose:
+      - '29092'
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '1'
+      KAFKA_MIN_INSYNC_REPLICAS: '1'
+  init-kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      kafka:
+        condition: service_healthy
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      kafka-topics --bootstrap-server kafka:29092 --list
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic order-recipe --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic order-storage --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic recipe-order --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic storage-order --replication-factor 1 --partitions 1
+
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server kafka:29092 --list
+      "
+  ms-order:
+    build: ./ms-order
+    container_name: ms-order
+    depends_on:
+      kafka:
+        condition: service_healthy
+    links:
+      - kafka
+    ports:
+      - 3400:3400
+    environment:
+      - PORT=3400
+      - REDIS_URL=redis://redis:6379
+      - MONGO_DB_URI=mongodb://db/restaurant
+      - KAFKA_BROKER=kafka:29092
+      - KAFKA_TOPIC_ORDER_RECIPE=order-recipe
+      - KAFKA_TOPIC_ORDER_STORAGE=order-storage
+      - KAFKA_TOPIC_RECIPE_ORDER=recipe-order
+      - KAFKA_TOPIC_STORAGE_ORDER=storage-order
+  ms-recipe:
+    build: ./ms-recipe
+    container_name: ms-recipe
+    depends_on:
+      kafka:
+        condition: service_healthy
+    links:
+      - kafka
+    ports:
+      - 3500:3500
+    environment:
+      - PORT=3500
+      - REDIS_URL=redis://redis:6379
+      - MONGO_DB_URI=mongodb://db/restaurant
+      - KAFKA_BROKER=kafka:29092
+      - KAFKA_TOPIC_RECIPE_ORDER=recipe-order
+      - KAFKA_TOPIC_ORDER_RECIPE=order-recipe
+  ms-storage:
+    build: ./ms-storage
+    container_name: ms-storage
+    depends_on:
+      kafka:
+        condition: service_healthy
+    links:
+      - kafka
+    ports:
+      - 3600:3600
+    environment:
+      - PORT=3600
+      - REDIS_URL=redis://redis:6379
+      - MONGO_DB_URI=mongodb://db/restaurant
+      - KAFKA_BROKER=kafka:29092
+      - KAFKA_TOPIC_STORAGE_ORDER=storage-order
+      - KAFKA_TOPIC_ORDER_STORAGE=order-storage
+  frontend:
+    build: './frontend'
+    container_name: frontend
+    links:
+      - ms-order
+      - ms-storage
+      - ms-recipe
+    ports:
+      - 3300:3300
+  nginx-proxy:
+    build: './nginx-proxy'
+    container_name: nginx-proxy
+    depends_on:
+      - frontend
+      - ms-order
+    ports:
+      - 80:80

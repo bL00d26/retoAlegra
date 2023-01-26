@@ -1,0 +1,188 @@
+[
+  {
+    "_id":{
+      "$oid":"63c5b9cf584c304dc90db5ec"
+    },
+    "name":"Pollo al Limón",
+    "ingredients":[
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5ea"
+        },
+        "quantity":1
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e2"
+        },
+        "quantity":3
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e3"
+        },
+        "quantity":1
+      }
+    ]
+  },
+  {
+    "_id":{
+      "$oid":"63c5b9cf584c304dc90db5ed"
+    },
+    "name":"Estofado de Carne",
+    "ingredients":[
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e5"
+        },
+        "quantity":2
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e6"
+        },
+        "quantity":2
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e3"
+        },
+        "quantity":1
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e9"
+        },
+        "quantity":2
+      }
+    ]
+  },
+  {
+    "_id":{
+      "$oid":"63c5b9cf584c304dc90db5ee"
+    },
+    "name":"Carne Asada con Queso y Lechuga",
+    "ingredients":[
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e9"
+        },
+        "quantity":1
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e8"
+        },
+        "quantity":1
+      },
+      {
+        "ingredient":{
+         "$oid": "63d1d1842dd54f8eee026f3b"
+        },
+        "quantity":1
+      }
+    ]
+  },
+  {
+    "_id":{
+      "$oid":"63c5b9cf584c304dc90db5ef"
+    },
+    "name":"Pollo Frito con Ensalada",
+    "ingredients":[
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5ea"
+        },
+        "quantity":2
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e7"
+        },
+        "quantity":1
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e5"
+        },
+        "quantity":1
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e2"
+        },
+        "quantity":1
+      }
+    ]
+  },
+  {
+    "_id":{
+      "$oid":"63c5b9cf584c304dc90db5f0"
+    },
+    "name":"Pollo Cubierto con Queso y Arroz",
+    "ingredients":[
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e8"
+        },
+        "quantity":2
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e3"
+        },
+        "quantity":1
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5ea"
+        },
+        "quantity":1
+      }
+    ]
+  },
+  {
+    "_id":{
+      "$oid":"63c5b9cf584c304dc90db5f1"
+    },
+    "name":"Ensalada de Verduras y Queso",
+    "ingredients":[
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e8"
+        },
+        "quantity":1
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e7"
+        },
+        "quantity":1
+      },
+      {
+        "ingredient":{
+         "$oid": "63d1d1842dd54f8eee026f3b"
+        },
+        "quantity":1
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e4"
+        },
+        "quantity":1
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e5"
+        },
+        "quantity":1
+      },
+      {
+        "ingredient":{
+         "$oid": "63c5b5cf584c304dc90db5e2"
+        },
+        "quantity":1
+      }
+    ]
+  }
+]
